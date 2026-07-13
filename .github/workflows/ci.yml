@@ -44,6 +44,7 @@ jobs:
           CI: true
 
       - name: Upload build artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: next-build
@@ -53,15 +54,18 @@ jobs:
             node_modules/**
 
       - name: Archive logs
-        if: failure()
+        if: always()
         run: |
           mkdir -p build-logs
+          # capture build outputs and lockfile for debugging
           cp -r .next build-logs || true
-          ls -la
+          cp pnpm-lock.yaml build-logs || true
+          cp pnpm-workspace.yaml build-logs || true
+          ls -la build-logs || true
         continue-on-error: true
 
-      - name: Upload logs (on failure)
-        if: failure()
+      - name: Upload logs and artifacts
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: build-logs
