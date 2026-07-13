@@ -20,19 +20,18 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Enable Corepack and prepare pnpm
+      - name: Install pnpm globally
         run: |
-          corepack enable
-          corepack prepare pnpm@latest --activate
+          npm install -g pnpm@latest --no-audit --no-fund
           pnpm -v
 
-      - name: Ensure pnpm available (install globally fallback)
+      - name: Ensure pnpm available
         run: |
           if ! command -v pnpm >/dev/null 2>&1; then
-            echo "pnpm not found — installing globally"
-            npm install -g pnpm@latest
+            echo "pnpm not found — installation failed"
+            exit 1
           fi
-          pnpm -v || true
+          pnpm -v
 
       - name: Install dependencies (pnpm)
         run: pnpm install --shamefully-hoist --reporter=append-only
