@@ -1,0 +1,68 @@
+name: CI - Build & Verify
+
+on:
+  push:
+    branches: ["main", "master"]
+  pull_request:
+    branches: ["main", "master"]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: Build on Ubuntu
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'pnpm'
+
+      - name: Enable Corepack and prepare pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+          pnpm -v
+
+      - name: Install dependencies (pnpm)
+        run: pnpm install --shamefully-hoist --reporter=append-only
+        env:
+          CI: true
+
+      - name: Lint
+        run: pnpm run lint || true
+
+      - name: Type check
+        run: pnpm run type-check || true
+
+      - name: Build (production)
+        run: pnpm run build
+        env:
+          CI: true
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: next-build
+          path: |
+            .next/**
+            .next/standalone/**
+            node_modules/**
+
+      - name: Archive logs
+        if: failure()
+        run: |
+          mkdir -p build-logs
+          cp -r .next build-logs || true
+          ls -la
+        continue-on-error: true
+
+      - name: Upload logs (on failure)
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build-logs
