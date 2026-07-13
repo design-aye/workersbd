@@ -22,7 +22,7 @@ jobs:
 
       - name: Install pnpm globally
         run: |
-          npm install -g pnpm@latest --no-audit --no-fund
+          npm install -g pnpm@8 --no-audit --no-fund
           pnpm -v
 
       - name: Ensure pnpm available
