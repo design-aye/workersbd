@@ -18,11 +18,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '18.20.8'
 
       - name: Install pnpm globally
         run: |
-          npm install -g pnpm@8 --no-audit --no-fund
+          npm install -g pnpm@9.15.9 --no-audit --no-fund
           pnpm -v
 
       - name: Ensure pnpm available
