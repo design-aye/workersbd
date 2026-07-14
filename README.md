@@ -1,6 +1,6 @@
 # WorkersBD - Advanced Bangladeshi Job Portal
 
-[![CI](https://github.com/design-aye/workersbd/actions/workflows/ci.yml/badge.svg)](https://github.com/design-aye/workersbd/actions/workflows/ci.yml)
+[![CI - Build & Verify](https://github.com/design-aye/workersbd/actions/workflows/ci.yml/badge.svg)](https://github.com/design-aye/workersbd/actions/workflows/ci.yml)
 
 > A comprehensive, SEO-optimized, mobile-first bilingual (English/বাংলা) job portal for Bangladesh
 
